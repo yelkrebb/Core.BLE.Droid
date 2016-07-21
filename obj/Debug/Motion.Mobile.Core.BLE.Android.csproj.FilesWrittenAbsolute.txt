@@ -1,0 +1,5 @@
+/Users/Berkley/Projects/Motion.Mobile.Core.BLE/Motion.Mobile.Core.BLE.Android/obj/Debug/MonoAndroid,Version=v6.0.AssemblyAttribute.cs
+/Users/Berkley/Projects/Motion.Mobile.Core.BLE/Motion.Mobile.Core.BLE.Android/obj/Debug/Motion.Mobile.Core.BLE.Android.obj.Debug.__AndroidLibraryProjects__.zip
+/Users/Berkley/Projects/Motion.Mobile.Core.BLE/Motion.Mobile.Core.BLE.Android/bin/Debug/Motion.Mobile.CoreBLE.dll
+/Users/Berkley/Projects/Motion.Mobile.Core.BLE/Motion.Mobile.Core.BLE.Android/bin/Debug/Motion.Mobile.CoreBLE.dll.mdb
+/Users/Berkley/Projects/Motion.Mobile.Core.BLE/Motion.Mobile.Core.BLE.Android/bin/Debug/Newtonsoft.Json.dll

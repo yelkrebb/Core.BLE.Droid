@@ -1,0 +1,15 @@
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/MonoAndroid,Version=v4.4.AssemblyAttribute.cs
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/Motion.Mobile.Core.BLE.Android.obj.Debug.__AndroidLibraryProjects__.zip
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Motion.Mobile.Core.BLE.Android.dll.mdb
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Motion.Mobile.Core.BLE.Android.dll
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Motion.Mobile.Core.BLE.Android.apk
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/android/bin/Motion.Mobile.Core.BLE.Android.apk
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/res/values/strings.xml
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/R.cs.flag
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Motion.Mobile.Core.BLE.Android-Signed.apk
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/uploadflags.txt
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/Motion.Mobile.Core.BLE.Android.dll
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/obj/Debug/Motion.Mobile.Core.BLE.Android.dll.mdb
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Motion.Mobile.CoreBLE.dll
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Motion.Mobile.CoreBLE.dll.mdb
+/Development/XamarinApps/XamTest/Motion.Mobile.Core.BLE.Droid/bin/Debug/Newtonsoft.Json.dll
