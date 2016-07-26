@@ -30,7 +30,7 @@ namespace Motion.Mobile.Core.BLE
 
 		public Guid ID {
 			get {
-//				return this._nativeService.Uuid.ToString ();
+				//return this._nativeService.Uuid.ToString ();
 				return Guid.ParseExact (this._nativeService.Uuid.ToString (), "d");
 			}
 		}

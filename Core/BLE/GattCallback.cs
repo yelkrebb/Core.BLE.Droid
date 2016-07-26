@@ -1,5 +1,6 @@
 using System;
 using Android.Bluetooth;
+using Android.OS;
 
 namespace Motion.Mobile.Core.BLE
 {
@@ -30,6 +31,11 @@ namespace Motion.Mobile.Core.BLE
 			// disconnected
 			case ProfileState.Disconnected:
 				Console.WriteLine ("disconnected");
+					if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+				{
+					Console.WriteLine("Changing connection priority to balanced");
+					gatt.RequestConnectionPriority(BluetoothGatt.ConnectionPriorityBalanced);
+				}
 				this.DeviceDisconnected (this, new DeviceConnectionEventArgs () { Device = device });
 				break;
 				// connecting
@@ -39,6 +45,11 @@ namespace Motion.Mobile.Core.BLE
 				// connected
 			case ProfileState.Connected:
 				Console.WriteLine ("Connected");
+					if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+				{
+					Console.WriteLine("Changing connection priority to high");
+					gatt.RequestConnectionPriority(BluetoothGatt.ConnectionPriorityHigh);
+				}
 				this.DeviceConnected (this, new DeviceConnectionEventArgs () { Device = device });
 				break;
 				// disconnecting

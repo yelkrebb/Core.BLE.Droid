@@ -13,7 +13,7 @@
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AssemblyName>Motion.Mobile.Core.BLE.Android</AssemblyName>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,9 +39,6 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="Mono.Android">
-      <HintPath>..\..\..\..\..\Library\Frameworks\Xamarin.Android.framework\Versions\6.0.3-5\lib\xbuild-frameworks\MonoAndroid\v4.3\Mono.Android.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +50,8 @@
     <Compile Include="Core\BLE\Device.cs" />
     <Compile Include="Core\BLE\GattCallback.cs" />
     <Compile Include="Core\BLE\Service.cs" />
+    <Compile Include="Core\BLE\LollipopScanCallback.cs" />
+    <Compile Include="Core\BLE\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

@@ -6,6 +6,9 @@ using Android.App;
 using System.Linq;
 using Android.Content;
 using Android.OS;
+using Android.Bluetooth.LE;
+using Java.Util;
+
 
 namespace Motion.Mobile.Core.BLE
 {
@@ -15,7 +18,7 @@ namespace Motion.Mobile.Core.BLE
 	/// 
 
 	[BroadcastReceiver(Enabled = true)]
-	[IntentFilter(new string[]{ BluetoothAdapter.ActionStateChanged,BluetoothAdapter.ActionConnectionStateChanged})]
+	[IntentFilter(new string[]{ BluetoothAdapter.ActionStateChanged, BluetoothAdapter.ActionConnectionStateChanged})]
 	public class Adapter : Java.Lang.Object, BluetoothAdapter.ILeScanCallback, IAdapter
 	{
 		// events
@@ -31,6 +34,11 @@ namespace Motion.Mobile.Core.BLE
 		protected BluetoothManager _manager;
 		protected BluetoothAdapter _adapter;
 		protected GattCallback _gattCallback;
+		protected LollipopScanCallback _lollipopCallback;
+
+		//for android version 5.0 and above
+		private BluetoothLeScanner _bleScanner;
+		private ScanSettings _scanSettings;
 
 		public bool IsConnected {
 			get { return GetConnectionState();}
@@ -51,7 +59,7 @@ namespace Motion.Mobile.Core.BLE
 				return this._connectedDevices;
 			}
 		} protected IList<IDevice> _connectedDevices = new List<IDevice>();
-
+		 
 
 		public Adapter ()
 		{
@@ -59,6 +67,11 @@ namespace Motion.Mobile.Core.BLE
 			// get a reference to the bluetooth system service
 			this._manager = (BluetoothManager) appContext.GetSystemService("bluetooth");
 			this._adapter = this._manager.Adapter;
+
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+			{
+				this.setLollipopProperty();
+			}
 
 			this._gattCallback = new GattCallback (this);
 
@@ -82,6 +95,18 @@ namespace Motion.Mobile.Core.BLE
 			};
 		}
 
+		private void setLollipopProperty()
+		{
+			Console.WriteLine("Setting up lollipop property");
+			this._bleScanner = this._adapter.BluetoothLeScanner;
+			this._lollipopCallback = new LollipopScanCallback();
+			this._lollipopCallback.deviceFoundEvent += OnLeScan;
+
+			//ScanMode is declared in Util object due to namespace conflict of ScanMode object in both Android.Bluetooth and Android.Bluetooth.LE
+			this._scanSettings = new ScanSettings.Builder().SetScanMode(Util.ScanModeLowLatency).Build();
+
+		}
+
 		public void onReceive(Context context, Intent intent) {
 			int prevState = intent.GetIntExtra (BluetoothAdapter.ExtraPreviousState, -1); 
 			int newState = intent.GetIntExtra(BluetoothAdapter.ExtraState, -1);
@@ -90,22 +115,57 @@ namespace Motion.Mobile.Core.BLE
 		}
 
 		//TODO: scan for specific service type eg. HeartRateMonitor
-		public async void StartScanningForDevices (Guid serviceUuid)
+		public async void StartScanningForDevices (List<Guid> serviceUuid)
 		{
-			StartScanningForDevices ();
-//			throw new NotImplementedException ("Not implemented on Android yet, look at _adapter.StartLeScan() overload");
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+			{
+
+				if (serviceUuid != null && serviceUuid.Count > 0)
+				{
+					List<ScanFilter> filterList = new List<ScanFilter>();
+					foreach (Guid guid in serviceUuid)
+					{
+						UUID uuid = UUID.FromString(guid.ToString());
+						ScanFilter filter = new ScanFilter.Builder().SetServiceUuid(new ParcelUuid(uuid)).Build();
+						filterList.Add(filter);
+					}
+					this.StartScanningForDevices(filterList);
+				}
+			}
+			else {
+				Console.WriteLine("Adapter: Starting scan for API 20 and below.");
+				StartScanningForDevices();
+			}
+		}
+
+		public async void StartScanningForDevices(List<ScanFilter> filters)
+		{
+			Console.WriteLine("Start BLE Scanning for 5.0 or up");
+			this._discoveredDevices = new List<IDevice>();
+			this._discoveredDevices.Clear();
+
+			this._isScanning = true;
+			this._bleScanner.StartScan(filters, _scanSettings, this._lollipopCallback);
+
+			// in 10 seconds, stop the scan
+			await Task.Delay(10000);
+
+			// if it is still scanning
+			if (this._isScanning)
+			{
+				Console.WriteLine("BluetoothLEManager 5.0: Scan timeout has elapses.");
+				this.StopScanningForDevices();
+			}
 		}
 
 		public async void StartScanningForDevices ()
 		{
-			Console.WriteLine ("Adapter: Starting a scan for devices.");
-
 			// clear out the list
 			this._discoveredDevices = new List<IDevice> ();
 			this._discoveredDevices.Clear ();
 			// start scanning
 			this._isScanning = true;
-			this._adapter.StartLeScan (this);
+			this._adapter.StartLeScan(this);
 
 			// in 10 seconds, stop the scan
 			await Task.Delay (10000);
@@ -113,16 +173,25 @@ namespace Motion.Mobile.Core.BLE
 			// if we're still scanning
 			if (this._isScanning) {
 				Console.WriteLine ("BluetoothLEManager: Scan timeout has elapsed.");
-				this._adapter.StopLeScan (this);
-				this.ScanCompleted (this, new EventArgs ());
+				//this._adapter.StopLeScan (this);
+				this.StopScanningForDevices();
 			}
 		}
 
 		public void StopScanningForDevices ()
 		{
-			Console.WriteLine ("Adapter: Stopping the scan for devices.");
-			this._isScanning = false;	
-			this._adapter.StopLeScan (this);
+			Console.WriteLine("Adapter: Stopping the scan for devices.");
+			this._isScanning = false;
+
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+			{
+				this._bleScanner.StopScan(this._lollipopCallback);
+			}
+			else {
+				this._adapter.StopLeScan(this);
+			}
+
+			this.ScanCompleted(this, new EventArgs());
 		}
 
 		public void OnLeScan (BluetoothDevice bleDevice, int rssi, byte[] scanRecord)
@@ -138,16 +207,6 @@ namespace Motion.Mobile.Core.BLE
 
 			if (!DeviceExistsInDiscoveredList (bleDevice)) {
 				this._discoveredDevices.Add	(device);
-
-				var parsedRecords = scanRecord;
-
-				try {
-
-					parsedRecords = scanRecord.Skip (34).Take (7).ToArray();
-
-				} catch (Exception) {
-
-				}
 			}
 			// TODO: in the cross platform API, cache the RSSI
 			// TODO: shouldn't i only raise this if it's not already in the list?

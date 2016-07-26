@@ -157,7 +157,26 @@ namespace Motion.Mobile.Core.BLE
 			return tcs.Task;
 		}
 
-		public void StartUpdates ()
+		public void StartUpdates()
+		{
+			Console.WriteLine("Enabling indication/notification...");
+			BluetoothGattDescriptor descriptor = _nativeCharacteristic.GetDescriptor(UUID.FromString("00002902-0000-1000-8000-00805f9b34fb"));
+			Console.WriteLine("Descriptor UUID: " + descriptor.Uuid.ToString());
+			if ((_nativeCharacteristic.Properties & GattProperty.Indicate) == GattProperty.Indicate)
+			{
+				Console.WriteLine("Enabling indication");
+				descriptor.SetValue(BluetoothGattDescriptor.EnableIndicationValue.ToArray());
+			}
+
+			if ((_nativeCharacteristic.Properties & GattProperty.Notify) == GattProperty.Notify)
+			{
+				Console.WriteLine("Enabling notification");
+				descriptor.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
+			}
+			_gatt.WriteDescriptor(descriptor);
+
+		}
+		/*public void StartUpdates ()
 		{
 			// TODO: should be bool RequestValue? compare iOS API for commonality
 			bool successful = false;
@@ -192,7 +211,7 @@ namespace Motion.Mobile.Core.BLE
 			}
 
 			Console.WriteLine ("RequestValue, Succesful: " + successful.ToString());
-		}
+		}*/
 
 
 
