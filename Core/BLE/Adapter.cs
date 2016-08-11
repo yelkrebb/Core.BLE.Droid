@@ -75,8 +75,11 @@ namespace Motion.Mobile.Core.BLE
 
 			this._gattCallback = new GattCallback (this);
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			this._gattCallback.DeviceConnected += (object sender, DeviceConnectionEventArgs e) => {
 				Console.WriteLine("Device Connected: "+ e.Device.Name);
 
@@ -93,6 +96,10 @@ namespace Motion.Mobile.Core.BLE
 				}
 				this.DeviceDisconnected (this, e);
 			};
+<<<<<<< HEAD
+
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 		}
 
 		private void setLollipopProperty()
@@ -204,7 +211,10 @@ namespace Motion.Mobile.Core.BLE
 //			}
 			Device device = new Device (bleDevice, null, null, rssi);
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			if (!DeviceExistsInDiscoveredList (bleDevice)) {
 				this._discoveredDevices.Add	(device);
 			}

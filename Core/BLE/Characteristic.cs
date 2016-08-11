@@ -12,7 +12,11 @@ namespace Motion.Mobile.Core.BLE
 	public class Characteristic : ICharacteristic
 	{
 		public event EventHandler<CharacteristicReadEventArgs> ValueUpdated = delegate {};
+<<<<<<< HEAD
+		public event EventHandler<CharacteristicReadEventArgs> NotificationStateValueUpdated = delegate { };
+=======
 
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 
 		protected BluetoothGattCharacteristic _nativeCharacteristic;
 		/// <summary>
@@ -33,6 +37,22 @@ namespace Motion.Mobile.Core.BLE
 			this._gatt = gatt;
 			this._gattCallback = gattCallback;
 
+<<<<<<< HEAD
+			//if (this._gattCallback != null) {
+			//	// wire up the characteristic value updating on the gattcallback
+			//	this._gattCallback.CharacteristicValueUpdated += (object sender, CharacteristicReadEventArgs e) => {
+			//		// it may be other characteristics, so we need to test
+			//		Console.WriteLine("Value updated for Characteristic ID-: "+ e.Characteristic.ID);
+			//		//if(e.Characteristic.ID == this.ID) {
+			//			// update our underlying characteristic (this one will have a value)
+			//			//TODO: is this necessary? probably the underlying reference is the same.
+			//			//this._nativeCharacteristic = e.Characteristic;
+
+			//			this.ValueUpdated (this, e);
+			//		//}
+			//	};
+			//}
+=======
 			if (this._gattCallback != null) {
 				// wire up the characteristic value updating on the gattcallback
 				this._gattCallback.CharacteristicValueUpdated += (object sender, CharacteristicReadEventArgs e) => {
@@ -47,6 +67,7 @@ namespace Motion.Mobile.Core.BLE
 					//}
 				};
 			}
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 		}
 
 		public string Uuid {
@@ -134,6 +155,15 @@ namespace Motion.Mobile.Core.BLE
 			if (!CanRead) {
 				throw new InvalidOperationException ("Characteristic does not support READ");
 			}
+<<<<<<< HEAD
+
+			//this._gattCallback.CharacteristicValueUpdated += (object sender, CharacteristicReadEventArgs e) => {
+			//	Console.WriteLine("Characteristic Value Received. ");
+			//	this.ValueUpdated (this, e);
+			//};
+
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			EventHandler<CharacteristicReadEventArgs> updated = null;
 			updated = (object sender, CharacteristicReadEventArgs e) => {
 				// it may be other characteristics, so we need to test
@@ -154,6 +184,11 @@ namespace Motion.Mobile.Core.BLE
 			Console.WriteLine(".....ReadAsync");
 			this._gatt.ReadCharacteristic (this._nativeCharacteristic);
 
+<<<<<<< HEAD
+			//Task.Delay(500);
+
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			return tcs.Task;
 		}
 
@@ -162,6 +197,16 @@ namespace Motion.Mobile.Core.BLE
 			Console.WriteLine("Enabling indication/notification...");
 			BluetoothGattDescriptor descriptor = _nativeCharacteristic.GetDescriptor(UUID.FromString("00002902-0000-1000-8000-00805f9b34fb"));
 			Console.WriteLine("Descriptor UUID: " + descriptor.Uuid.ToString());
+<<<<<<< HEAD
+
+			this._gattCallback.DescriptorWrite += (object sender, CharacteristicReadEventArgs e) =>
+			{
+				Console.WriteLine("Descriptor Write Received. ");
+				this.NotificationStateValueUpdated(this, e);
+			};
+
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			if ((_nativeCharacteristic.Properties & GattProperty.Indicate) == GattProperty.Indicate)
 			{
 				Console.WriteLine("Enabling indication");
@@ -174,8 +219,19 @@ namespace Motion.Mobile.Core.BLE
 				descriptor.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
 			}
 			_gatt.WriteDescriptor(descriptor);
+<<<<<<< HEAD
+			Task.Delay(500);
 
 		}
+
+		void UpdatedNotificationState(object sender, CharacteristicReadEventArgs e)
+		{
+			Console.WriteLine("Notification state event " + e.Characteristic.ID);
+		}
+=======
+
+		}
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 		/*public void StartUpdates ()
 		{
 			// TODO: should be bool RequestValue? compare iOS API for commonality

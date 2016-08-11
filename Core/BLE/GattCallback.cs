@@ -11,6 +11,10 @@ namespace Motion.Mobile.Core.BLE
 		public event EventHandler<DeviceConnectionEventArgs> DeviceDisconnected = delegate {};
 		public event EventHandler<ServicesDiscoveredEventArgs> ServicesDiscovered = delegate {};
 		public event EventHandler<CharacteristicReadEventArgs> CharacteristicValueUpdated = delegate {};
+<<<<<<< HEAD
+		public event EventHandler<CharacteristicReadEventArgs> DescriptorWrite = delegate {};
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 
 		protected Adapter _adapter;
 
@@ -76,11 +80,29 @@ namespace Motion.Mobile.Core.BLE
 
 		}
 
+<<<<<<< HEAD
+		public override void OnDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, GattStatus status)
+		{
+			base.OnDescriptorWrite(gatt, descriptor, status);
+
+			Console.WriteLine("OnDescriptorWrite: " + descriptor.ToString());
+			this.DescriptorWrite(this, new CharacteristicReadEventArgs() 
+			{ 
+				Characteristic = new Characteristic(descriptor.Characteristic, gatt, this) 
+			});
+		}
+
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 		public override void OnCharacteristicRead (BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, GattStatus status)
 		{
 			base.OnCharacteristicRead (gatt, characteristic, status);
 
+<<<<<<< HEAD
+			Console.WriteLine ("GattCallBack: OnCharacteristicRead: " + characteristic.GetStringValue (0));
+=======
 			Console.WriteLine ("OnCharacteristicRead: " + characteristic.GetStringValue (0));
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 
 			this.CharacteristicValueUpdated (this, new CharacteristicReadEventArgs () { 
 				Characteristic = new Characteristic (characteristic, gatt, this) }

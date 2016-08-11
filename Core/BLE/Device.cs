@@ -38,6 +38,13 @@ namespace Motion.Mobile.Core.BLE
 					this._services = new List<IService> ();
 					foreach (var item in services) {
 						this._services.Add (new Service (item, this._gatt, this._gattCallback));
+<<<<<<< HEAD
+						foreach (var itm in item.Characteristics)
+						{
+							Console.WriteLine("Characteristic: " + itm.Uuid.ToString());
+						}
+=======
+>>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 					}
 					this.ServicesDiscovered (this, e);
 				};
