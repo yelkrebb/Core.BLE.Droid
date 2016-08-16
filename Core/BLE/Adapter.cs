@@ -75,11 +75,6 @@ namespace Motion.Mobile.Core.BLE
 
 			this._gattCallback = new GattCallback (this);
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			this._gattCallback.DeviceConnected += (object sender, DeviceConnectionEventArgs e) => {
 				Console.WriteLine("Device Connected: "+ e.Device.Name);
 
@@ -96,10 +91,9 @@ namespace Motion.Mobile.Core.BLE
 				}
 				this.DeviceDisconnected (this, e);
 			};
-<<<<<<< HEAD
 
-=======
->>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
+			this._gattCallback.CharacteristicValueUpdated += Handle_ValueUpdated;
+
 		}
 
 		private void setLollipopProperty()
@@ -211,10 +205,6 @@ namespace Motion.Mobile.Core.BLE
 //			}
 			Device device = new Device (bleDevice, null, null, rssi);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 709bd1e929ca88be062670e17cf6dfc821a7bad1
 			if (!DeviceExistsInDiscoveredList (bleDevice)) {
 				this._discoveredDevices.Add	(device);
 			}
@@ -254,10 +244,16 @@ namespace Motion.Mobile.Core.BLE
 
 		public void SendCommand (ICharacteristic handle, byte[] command)
 		{
-			handle.ValueUpdated += Handle_ValueUpdated;
+			//handle.ValueUpdated += Handle_ValueUpdated;
 
 			if (handle.CanWrite)
-				handle.Write (command);
+			{
+				Console.WriteLine("Adapter: Sending Command");
+				handle.Write(command);
+			}
+			else {
+				Console.WriteLine("Unable to write to handle");
+			}
 		}
 
 		void Handle_ValueUpdated (object sender, CharacteristicReadEventArgs e)
