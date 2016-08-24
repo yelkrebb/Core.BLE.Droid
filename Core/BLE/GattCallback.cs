@@ -103,7 +103,9 @@ namespace Motion.Mobile.Core.BLE
 		{
 			base.OnCharacteristicWrite(gatt, characteristic, status);
 
-			Console.WriteLine("GattCallBack: OnCharacteristicWrite: " + characteristic.GetStringValue(0));
+			string hex = BitConverter.ToString(characteristic.GetValue());
+
+			Console.WriteLine("GattCallBack: OnCharacteristicWrite: " + hex.Replace("-", ""));
 		}
 
 		public override void OnCharacteristicChanged (BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)

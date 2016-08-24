@@ -72,6 +72,11 @@ namespace Motion.Mobile.Core.BLE
 			}
 		}
 
+		public int ValueUpdatedSubscribers
+		{
+			get { return this.ValueUpdated.GetInvocationList().Length; }
+		}
+
 		public string Name {
 			get { return KnownCharacteristics.Lookup (this.ID).Name; }
 		}
@@ -150,6 +155,16 @@ namespace Motion.Mobile.Core.BLE
 		public void StartUpdates()
 		{
 			BluetoothGattDescriptor descriptor = _nativeCharacteristic.GetDescriptor(UUID.FromString("00002902-0000-1000-8000-00805f9b34fb"));
+			if (descriptor == null)
+			{
+				descriptor = _nativeCharacteristic.GetDescriptor(UUID.FromString("00002901-0000-1000-8000-00805f9b34fb"));
+			}
+			//BluetoothGattDescriptor descriptor = _nativeCharacteristic.GetDescriptor(UUID.FromString("00002901-0000-1000-8000-00805f9b34fb"));
+
+			foreach (BluetoothGattDescriptor desc in _nativeCharacteristic.Descriptors)
+			{
+				Console.WriteLine("Descriptor UUID: " + desc.Uuid);
+			}
 
 			this._gattCallback.DescriptorWrite += (object sender, CharacteristicReadEventArgs e) =>
 			{
@@ -163,6 +178,8 @@ namespace Motion.Mobile.Core.BLE
 			//	this.ValueUpdated(this, e);
 			//};
 
+			Console.WriteLine("Properties: " + (int) _nativeCharacteristic.Properties);
+
 			if ((_nativeCharacteristic.Properties & GattProperty.Indicate) == GattProperty.Indicate)
 			{
 				Console.WriteLine("Enabling indication");
@@ -173,6 +190,15 @@ namespace Motion.Mobile.Core.BLE
 			if ((_nativeCharacteristic.Properties & GattProperty.Notify) == GattProperty.Notify)
 			{
 				Console.WriteLine("Enabling notification");
+
+				_gatt.SetCharacteristicNotification(_nativeCharacteristic, true);
+
+				descriptor.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
+			}
+
+			if ((_nativeCharacteristic.Properties & GattProperty.WriteNoResponse) == GattProperty.WriteNoResponse)
+			{
+				Console.WriteLine("Enabling notification/write no response");
 
 				_gatt.SetCharacteristicNotification(_nativeCharacteristic, true);
 
@@ -191,7 +217,6 @@ namespace Motion.Mobile.Core.BLE
 			}
 
 			Console.WriteLine("Writing to characteristic: " + _nativeCharacteristic.Uuid);
-			Console.WriteLine("gatt: " + this._gatt.ToString());
 			_nativeCharacteristic.SetValue(data);
 			this._gatt.WriteCharacteristic(this._nativeCharacteristic);
 		}

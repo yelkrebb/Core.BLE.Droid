@@ -63,6 +63,7 @@ namespace Motion.Mobile.Core.BLE
 
 		public Adapter ()
 		{
+			Console.WriteLine("Initializing Adapter");
 			var appContext = Application.Context;
 			// get a reference to the bluetooth system service
 			this._manager = (BluetoothManager) appContext.GetSystemService("bluetooth");
@@ -83,6 +84,7 @@ namespace Motion.Mobile.Core.BLE
 			};
 
 			this._gattCallback.DeviceDisconnected += (object sender, DeviceConnectionEventArgs e) => {
+				Console.WriteLine("Device Disconnected: " + e.Device.Name);
 				// TODO: remove the disconnected device from the _connectedDevices list
 				// i don't think this will actually work, because i'm created a new underlying device here.
 				if(this._connectedDevices.Contains(e.Device))
@@ -197,7 +199,7 @@ namespace Motion.Mobile.Core.BLE
 
 		public void OnLeScan (BluetoothDevice bleDevice, int rssi, byte[] scanRecord)
 		{
-			Console.WriteLine ("Adapter.LeScanCallback: " + bleDevice.Name);
+			Console.WriteLine ("Adapter.LeScanCallback: " + bleDevice.Name + " : " + bleDevice.Address);
 			// TODO: for some reason, this doesn't work, even though they have the same pointer,
 			// it thinks that the item doesn't exist. so i had to write my own implementation
 //			if(!this._discoveredDevices.Contains(device) ) {
